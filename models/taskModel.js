@@ -16,7 +16,7 @@ const taskSchema = new mongoose.Schema({
     dueDate: { type: Date }
 });
 
-// Create and export the Task model
-const Task = mongoose.model('Task', taskSchema);
+// Create and export the Tasks model
+const Tasks = mongoose.model('Tasks', taskSchema);
 
-module.exports = Task;
+module.exports = Tasks;

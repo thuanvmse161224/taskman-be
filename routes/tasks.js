@@ -2,11 +2,11 @@
 
 const express = require('express');
 const router = express.Router();
-const Task = require('../models/taskModel');
+const Tasks = require('../models/taskModel');
 
 // GET all tasks
 router.get('/', (req, res, next) => {
-    Task.find()
+    Tasks.find()
         .then(tasks => {
             res.json(tasks);
         })
@@ -15,7 +15,7 @@ router.get('/', (req, res, next) => {
 
 // GET a task by ID
 router.get('/:id', (req, res, next) => {
-    Task.findById(req.params.id)
+    Tasks.findById(req.params.id)
         .then(task => {
             if (!task) {
                 const error = new Error('Task not found');
@@ -31,7 +31,7 @@ router.get('/:id', (req, res, next) => {
 router.post('/', (req, res, next) => {
     const { title, description, status, dueDate } = req.body;
 
-    const newTask = new Task({
+    const newTask = new Tasks({
         title,
         description,
         status,
@@ -49,7 +49,7 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
     const { title, description, status, dueDate } = req.body;
 
-    Task.findByIdAndUpdate(req.params.id, { title, description, status, dueDate }, { new: true })
+    Tasks.findByIdAndUpdate(req.params.id, { title, description, status, dueDate }, { new: true })
         .then(task => {
             if (!task) {
                 const error = new Error('Task not found');
@@ -63,7 +63,7 @@ router.put('/:id', (req, res, next) => {
 
 // DELETE a task by ID
 router.delete('/:id', (req, res, next) => {
-    Task.findByIdAndDelete(req.params.id)
+    Tasks.findByIdAndDelete(req.params.id)
         .then(task => {
             if (!task) {
                 const error = new Error('Task not found');

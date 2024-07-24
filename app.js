@@ -1,6 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+const mongoose = require('mongoose');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 require('dotenv').config(); // Load environment variables from .env file
@@ -8,6 +9,21 @@ require('dotenv').config(); // Load environment variables from .env file
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var tasksRouter = require('./routes/tasks');
+
+// Mongoose setup
+const mongoURI = process.env.MONGODB_URI;
+mongoose
+    .connect(mongoURI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        dbName: "task_management", // Specify the database name here
+    })
+    .then(() => {
+        console.log("Connected to MongoDB");
+    })
+    .catch((err) => {
+        console.error("Error connecting to MongoDB", err);
+    });
 
 var app = express();
 
