@@ -1,6 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+const cors = require('cors');
 const mongoose = require('mongoose');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -13,11 +14,7 @@ var tasksRouter = require('./routes/tasks');
 // Mongoose setup
 const mongoURI = process.env.MONGODB_URI;
 mongoose
-    .connect(mongoURI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        dbName: "task_management", // Specify the database name here
-    })
+    .connect(mongoURI, {dbName: "task_management" })
     .then(() => {
         console.log("Connected to MongoDB");
     })
@@ -30,6 +27,20 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+};
+
+app.use(cors(corsOptions));
 
 app.use(logger('dev'));
 app.use(express.json());
